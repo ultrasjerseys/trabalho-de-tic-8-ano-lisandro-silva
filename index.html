@@ -22,6 +22,87 @@
             padding: 20px;
         }
 
+        /* Ecrã de Loading (Splash Screen) */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Ícone 3D a Girar */
+        .spinning-icon {
+            font-size: 80px;
+            color: white;
+            margin-bottom: 30px;
+            animation: spin3d 3s linear infinite, pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes spin3d {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+            25% {
+                transform: rotateX(45deg) rotateY(90deg) rotateZ(0deg);
+            }
+            50% {
+                transform: rotateX(0deg) rotateY(180deg) rotateZ(45deg);
+            }
+            75% {
+                transform: rotateX(-45deg) rotateY(270deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(0deg) rotateY(360deg) rotateZ(0deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8));
+            }
+        }
+
+        /* Texto de Carregamento */
+        .loading-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            animation: fadeInText 1.5s ease-in-out forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Poster Principal */
         .poster {
             width: 100%;
             max-width: 900px;
@@ -35,6 +116,19 @@
             justify-content: space-between;
             position: relative;
             overflow: hidden;
+            animation: fadeInPoster 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInPoster {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .poster::before {
@@ -49,7 +143,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 20px; /* Reduzido para mais espaço */
+            margin-bottom: 20px;
         }
 
         .school-name {
@@ -62,7 +156,7 @@
         }
 
         .main-title {
-            font-size: 40px; /* Reduzido ligeiramente */
+            font-size: 40px;
             font-weight: 900;
             color: #0d47a1;
             line-height: 1.2;
@@ -71,7 +165,7 @@
         }
 
         .subtitle {
-            font-size: 16px; /* Reduzido ligeiramente */
+            font-size: 16px;
             color: #1565c0;
             font-weight: 500;
             font-style: italic;
@@ -81,15 +175,15 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Alterado para começar do topo */
-            gap: 15px; /* Reduzido para mais espaço */
+            justify-content: flex-start;
+            gap: 15px;
             padding-top: 10px;
         }
 
         .section {
             background: white;
             border-left: 6px solid #1565c0;
-            padding: 15px; /* Reduzido para mais espaço */
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(13, 71, 161, 0.08);
             transition: transform 0.3s ease;
@@ -101,8 +195,8 @@
 
         .section-number {
             display: inline-block;
-            width: 35px; /* Reduzido */
-            height: 35px; /* Reduzido */
+            width: 35px;
+            height: 35px;
             background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
             color: white;
             border-radius: 50%;
@@ -114,14 +208,14 @@
         }
 
         .section-title {
-            font-size: 17px; /* Reduzido ligeiramente */
+            font-size: 17px;
             font-weight: 700;
             color: #0d47a1;
             margin-bottom: 5px;
         }
 
         .section-content {
-            font-size: 14px; /* Aumentado para melhor legibilidade */
+            font-size: 14px;
             color: #424242;
             line-height: 1.5;
         }
@@ -182,11 +276,26 @@
             .section-content {
                 font-size: 11px;
             }
+
+            .spinning-icon {
+                font-size: 60px;
+            }
+
+            .loading-text {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="poster">
+    <!-- Ecrã de Loading com Ícone 3D a Girar -->
+    <div class="loading-screen" id="loadingScreen">
+        <i class="fas fa-globe spinning-icon"></i>
+        <div class="loading-text">Cuidados na Construção de um Website</div>
+    </div>
+
+    <!-- Poster Principal -->
+    <div class="poster" id="poster">
         <div class="header">
             <div class="school-name">Escola Básica de D. Pedro II, Moita</div>
             <h1 class="main-title">
@@ -235,6 +344,19 @@
 
         <div class="decorative-element"></div>
     </div>
+
+    <script>
+        // Remover o ecrã de loading após 4 segundos
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingScreen = document.getElementById('loadingScreen');
+                const poster = document.getElementById('poster');
+                
+                loadingScreen.classList.add('hidden');
+                poster.style.opacity = '1';
+            }, 4000); // 4 segundos
+        });
+    </script>
 </body>
 </html>
 
